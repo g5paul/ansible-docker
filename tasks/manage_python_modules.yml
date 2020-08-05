@@ -76,3 +76,4 @@
   become: true
   register: result
   until: result is successful
+  ignore_errors: "{{ ansible_check_mode }}"
