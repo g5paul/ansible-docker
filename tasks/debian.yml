@@ -61,7 +61,8 @@
 
 - name: debian | installing docker pre-reqs
   apt:
-    name: "linux-image-extra-{{ ansible_kernel }}"
+    #name: "linux-image-extra-{{ ansible_kernel }}"
+    name: "linux-image-extra-{{ docker_linux_image_extra_version}}"
     state: present
   become: true
   register: result
@@ -78,6 +79,15 @@
   ignore_errors: true
   register: has_docker
   changed_when: false
+
+- name: debian | installing docker-cli
+  apt:
+    name: "docker-ce-cli={{ docker_version_debian }}"
+    state: present
+  become: true
+  register: result
+  until: result is successful
+  when: has_docker is failed
 
 - name: debian | installing docker
   apt:
